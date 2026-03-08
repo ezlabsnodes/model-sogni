@@ -53,6 +53,7 @@ add_to_queue "https://pub-5bc58981af9f42659ff8ada57bfea92c.r2.dev/ComfyUI/models
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/flux2_dev_fp8mixed.safetensors" "diffusion_models"
 add_to_queue "https://pub-5bc58981af9f42659ff8ada57bfea92c.r2.dev/ComfyUI/models/diffusion_models/z_image_bf16.safetensors" "diffusion_models"
 add_to_queue "https://pub-5bc58981af9f42659ff8ada57bfea92c.r2.dev/ComfyUI/models/diffusion_models/acestep_v1.5_sft.safetensors" "diffusion_models"
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_scaled.safetensors" "diffusion_models"
 
 # --- VAE ---
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/vae/wan_2.1_vae.safetensors" "vae"
@@ -61,6 +62,7 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/vae/ltx-2-vae.safetensors" "va
 add_to_queue "https://cdn.sogni.ai/vae/ae.safetensors" "vae"
 add_to_queue "https://pub-5bc58981af9f42659ff8ada57bfea92c.r2.dev/ComfyUI/models/vae/ace_1.5_vae.safetensors" "vae"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/vae/flux2-vae.safetensors" "vae"
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/vae/LTX23_video_vae_bf16.safetensors" "vae"
 
 # --- TEXT ENCODERS ---
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors" "text_encoders"
@@ -72,6 +74,8 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/qwen_3_4b.safete
 add_to_queue "https://cdn.sogni.ai/text_encoder/clip_l.safetensors" "text_encoders"
 add_to_queue "https://cdn.sogni.ai/text_encoder/t5xxl_fp8_e4m3fn_scaled.safetensors" "text_encoders"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/mistral_3_small_flux2_fp8.safetensors" "text_encoders"
+# [TAMBAHAN BARU: LTX 2.3 Text Encoder]
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/ltx-2.3_text_projection_bf16.safetensors" "text_encoders"
 
 # --- LORAS ---
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors" "loras"
@@ -89,7 +93,7 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-canny-
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-pose-control.safetensors" "loras"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-depth-control.safetensors" "loras"
 
-# --- UNET (Sudah dikoreksi ke diffusion_models) ---
+# --- UNET 
 add_to_queue "https://cdn.sogni.ai/unet/flux1-schnell_fp8.safetensors" "diffusion_models"
 add_to_queue "https://cdn.sogni.ai/unet/flux1-krea-dev_fp8_scaled.safetensors" "diffusion_models"
 add_to_queue "https://cdn.sogni.ai/unet/chroma-unlocked-v46-flash_float8_e4m3fn_scaled_learned.safetensors" "diffusion_models"
@@ -105,6 +109,9 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/audio_encoders/wav2vec2_large_
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/checkpoints/LTX2_audio_vae_bf16.safetensors" "checkpoints"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2-spatial-upscaler-x2-1.0.safetensors" "latent_upscale_models"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/sam2/sam2_hiera_base_plus.safetensors" "sam2"
+# [TAMBAHAN BARU: LTX 2.3 Checkpoints & Latent Upscale Models]
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/checkpoints/LTX23_audio_vae_bf16.safetensors" "checkpoints"
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2.3-spatial-upscaler-x2-1.0.safetensors" "latent_upscale_models"
 
 # --- DWPOSE ---
 add_to_queue "https://cdn.sogni.ai/ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/yzd-v/DWPose/yolox_l.onnx" "custom_nodes/comfyui_controlnet_aux/ckpts/yzd-v/DWPose"
@@ -120,7 +127,7 @@ echo "=========================================="
 CMD="aria2c --input-file=\"$QUEUE_FILE\" -j 5 -x 16 -s 16 -k 1M -c && echo '✅ SEMUA DOWNLOAD SELESAI!' && sleep 10"
 screen -dmS "MasterDownload" bash -c "$CMD"
 
-echo "🎉 Proses antrean (56 file) sedang berjalan di background!"
+echo "🎉 Proses antrean (61 file) sedang berjalan di background!"
 echo "➡️ Ketik: 'screen -r MasterDownload' untuk melihat persentase download."
 echo "➡️ Kalau layar sudah bersih, jangan lupa ritual:"
 echo "   chmod -R 777 $BASE_DIR/"
