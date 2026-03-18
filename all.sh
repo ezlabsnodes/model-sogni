@@ -74,7 +74,6 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/qwen_3_4b.safete
 add_to_queue "https://cdn.sogni.ai/text_encoder/clip_l.safetensors" "text_encoders"
 add_to_queue "https://cdn.sogni.ai/text_encoder/t5xxl_fp8_e4m3fn_scaled.safetensors" "text_encoders"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/mistral_3_small_flux2_fp8.safetensors" "text_encoders"
-# [TAMBAHAN BARU: LTX 2.3 Text Encoder]
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/ltx-2.3_text_projection_bf16.safetensors" "text_encoders"
 
 # --- LORAS ---
@@ -92,8 +91,10 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-detail
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-canny-control.safetensors" "loras"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-pose-control.safetensors" "loras"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-depth-control.safetensors" "loras"
+# [TAMBAHAN BARU: LTX 2.3 Lora Dynamic]
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors" "loras"
 
-# --- UNET 
+# --- UNET ---
 add_to_queue "https://cdn.sogni.ai/unet/flux1-schnell_fp8.safetensors" "diffusion_models"
 add_to_queue "https://cdn.sogni.ai/unet/flux1-krea-dev_fp8_scaled.safetensors" "diffusion_models"
 add_to_queue "https://cdn.sogni.ai/unet/chroma-unlocked-v46-flash_float8_e4m3fn_scaled_learned.safetensors" "diffusion_models"
@@ -109,9 +110,10 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/audio_encoders/wav2vec2_large_
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/checkpoints/LTX2_audio_vae_bf16.safetensors" "checkpoints"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2-spatial-upscaler-x2-1.0.safetensors" "latent_upscale_models"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/sam2/sam2_hiera_base_plus.safetensors" "sam2"
-# [TAMBAHAN BARU: LTX 2.3 Checkpoints & Latent Upscale Models]
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/checkpoints/LTX23_audio_vae_bf16.safetensors" "checkpoints"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2.3-spatial-upscaler-x2-1.0.safetensors" "latent_upscale_models"
+# [TAMBAHAN BARU: LTX 2.3 Upscaler v1.1]
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2.3-spatial-upscaler-x2-1.1.safetensors" "latent_upscale_models"
 
 # --- DWPOSE ---
 add_to_queue "https://cdn.sogni.ai/ComfyUI/custom_nodes/comfyui_controlnet_aux/ckpts/yzd-v/DWPose/yolox_l.onnx" "custom_nodes/comfyui_controlnet_aux/ckpts/yzd-v/DWPose"
@@ -122,14 +124,12 @@ echo "🚀 MEMULAI ULTIMATE DOWNLOAD VIA ANTREAN..."
 echo "=========================================="
 
 # Jalankan 1 Screen Utama untuk aria2c
-# -j 5 = 5 file berjalan bersamaan
-# -x 16 -s 16 = maksimal 16 koneksi per file
 CMD="aria2c --input-file=\"$QUEUE_FILE\" -j 5 -x 16 -s 16 -k 1M -c && echo '✅ SEMUA DOWNLOAD SELESAI!' && sleep 10"
 screen -dmS "MasterDownload" bash -c "$CMD"
 
-echo "🎉 Proses antrean (61 file) sedang berjalan di background!"
+echo "🎉 Proses antrean (63 file) sedang berjalan di background!"
 echo "➡️ Ketik: 'screen -r MasterDownload' untuk melihat persentase download."
-echo "➡️ Kalau layar sudah bersih, jangan lupa ritual:"
-echo "   chmod -R 777 $BASE_DIR/"
-echo "   cd ~/sogni-b200-cluster && docker compose restart"
+echo "➡️ Ritual akhir:"
+echo "    chmod -R 777 $BASE_DIR/"
+echo "    cd ~/sogni-b200-cluster && docker compose restart"
 echo "=========================================="
