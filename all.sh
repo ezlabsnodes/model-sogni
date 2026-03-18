@@ -54,6 +54,7 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/flux2_dev_fp8
 add_to_queue "https://pub-5bc58981af9f42659ff8ada57bfea92c.r2.dev/ComfyUI/models/diffusion_models/z_image_bf16.safetensors" "diffusion_models"
 add_to_queue "https://pub-5bc58981af9f42659ff8ada57bfea92c.r2.dev/ComfyUI/models/diffusion_models/acestep_v1.5_sft.safetensors" "diffusion_models"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_scaled.safetensors" "diffusion_models"
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/ltx-2.3-22b-dev_transformer_only_fp8_scaled.safetensors" "diffusion_models"
 
 # --- VAE ---
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/vae/wan_2.1_vae.safetensors" "vae"
@@ -91,7 +92,6 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-detail
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-canny-control.safetensors" "loras"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-pose-control.safetensors" "loras"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-depth-control.safetensors" "loras"
-# [TAMBAHAN BARU: LTX 2.3 Lora Dynamic]
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors" "loras"
 
 # --- UNET ---
@@ -112,7 +112,6 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2-sp
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/sam2/sam2_hiera_base_plus.safetensors" "sam2"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/checkpoints/LTX23_audio_vae_bf16.safetensors" "checkpoints"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2.3-spatial-upscaler-x2-1.0.safetensors" "latent_upscale_models"
-# [TAMBAHAN BARU: LTX 2.3 Upscaler v1.1]
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/latent_upscale_models/ltx-2.3-spatial-upscaler-x2-1.1.safetensors" "latent_upscale_models"
 
 # --- DWPOSE ---
@@ -127,7 +126,7 @@ echo "=========================================="
 CMD="aria2c --input-file=\"$QUEUE_FILE\" -j 5 -x 16 -s 16 -k 1M -c && echo '✅ SEMUA DOWNLOAD SELESAI!' && sleep 10"
 screen -dmS "MasterDownload" bash -c "$CMD"
 
-echo "🎉 Proses antrean (63 file) sedang berjalan di background!"
+echo "🎉 Proses antrean (64 file) sedang berjalan di background!"
 echo "➡️ Ketik: 'screen -r MasterDownload' untuk melihat persentase download."
 echo "➡️ Ritual akhir:"
 echo "    chmod -R 777 $BASE_DIR/"
