@@ -93,6 +93,8 @@ add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-canny-
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-pose-control.safetensors" "loras"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2-19b-ic-lora-depth-control.safetensors" "loras"
 add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/ltx-2.3-22b-distilled-lora-dynamic_fro09_avg_rank_105_bf16.safetensors" "loras"
+# [TAMBAHAN BARU: Qwen Image Edit Multiple Angles LoRA]
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/qwen-image-edit-2511-multiple-angles-lora.safetensors" "loras"
 
 # --- UNET ---
 add_to_queue "https://cdn.sogni.ai/unet/flux1-schnell_fp8.safetensors" "diffusion_models"
@@ -126,7 +128,7 @@ echo "=========================================="
 CMD="aria2c --input-file=\"$QUEUE_FILE\" -j 5 -x 16 -s 16 -k 1M -c && echo '✅ SEMUA DOWNLOAD SELESAI!' && sleep 10"
 screen -dmS "MasterDownload" bash -c "$CMD"
 
-echo "🎉 Proses antrean (64 file) sedang berjalan di background!"
+echo "🎉 Proses antrean (65 file) sedang berjalan di background!"
 echo "➡️ Ketik: 'screen -r MasterDownload' untuk melihat persentase download."
 echo "➡️ Ritual akhir:"
 echo "    chmod -R 777 $BASE_DIR/"
