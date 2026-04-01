@@ -2,62 +2,74 @@
 
 # --- KONFIGURASI ---
 BASE_DIR=~/sogni-b200-cluster/data-models
+QUEUE_FILE="download_queue.txt"
 
 # 1. Pastikan Tools Terinstall
 echo "🔧 Mengecek tools..."
 apt update -qq
 apt install -y screen aria2
 
-# 2. Buat Folder Tujuan
-mkdir -p $BASE_DIR/diffusion_models
-mkdir -p $BASE_DIR/vae
-mkdir -p $BASE_DIR/text_encoders
-mkdir -p $BASE_DIR/clip_vision
-mkdir -p $BASE_DIR/loras
+# 2. Buat Semua Folder Tujuan
+echo "📂 Membuat struktur direktori..."
+mkdir -p "$BASE_DIR/diffusion_models"
+mkdir -p "$BASE_DIR/vae"
+mkdir -p "$BASE_DIR/text_encoders"
+mkdir -p "$BASE_DIR/clip_vision"
+mkdir -p "$BASE_DIR/loras"
 
-# Fungsi untuk Menjalankan Screen
-launch_download() {
-    NAME=$1
+# 3. Siapkan File Antrean
+echo "📝 Menyusun antrean download (bebas duplikat)..."
+> "$QUEUE_FILE" # Kosongkan file jika sudah ada
+
+add_to_queue() {
+    URL=$1
     FOLDER=$2
-    URL=$3
+    FILENAME=$(basename "$URL")
     
-    # Perintah yang dijalankan di dalam screen
-    CMD="cd $BASE_DIR/$FOLDER && echo '🚀 DOWNLOAD MULAI: $NAME' && aria2c -x 16 -s 16 -k 1M -c '$URL' && echo '✅ SELESAI! Screen akan menutup dalam 10 detik...' && sleep 10"
-
-    # Jalankan Screen Detached (Background)
-    screen -dmS "$NAME" bash -c "$CMD"
-    
-    echo "✅ Screen '$NAME' berjalan! (Folder: $FOLDER)"
+    echo "$URL" >> "$QUEUE_FILE"
+    echo "  dir=$BASE_DIR/$FOLDER" >> "$QUEUE_FILE"
+    echo "  out=$FILENAME" >> "$QUEUE_FILE"
 }
 
+# --- DIFFUSION MODELS (Core Models) ---
+# Wan 2.2 14B I2V (High & Low Noise)
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors" "diffusion_models"
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors" "diffusion_models"
+# LTX 2.3 22B Distilled (Dipakai untuk T2V & I2V)
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/ltx-2.3-22b-distilled_transformer_only_fp8_scaled.safetensors" "diffusion_models"
+
+# --- VAE (Wajib untuk decoding video) ---
+# VAE untuk Wan 2.2
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/vae/wan_2.1_vae.safetensors" "vae"
+# VAE khusus LTX 2.3
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/vae/LTX23_video_vae_bf16.safetensors" "vae"
+
+# --- TEXT ENCODERS (Wajib untuk membaca prompt teks) ---
+# Text Encoders untuk Wan & LTX
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors" "text_encoders"
+add_to_queue "https://cdn.sogni.ai/text_encoder/t5xxl_fp8_e4m3fn_scaled.safetensors" "text_encoders"
+add_to_queue "https://cdn.sogni.ai/text_encoder/clip_l.safetensors" "text_encoders"
+# Projection khusus LTX 2.3
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/text_encoders/ltx-2.3_text_projection_bf16.safetensors" "text_encoders"
+
+# --- CLIP VISION (Wajib untuk Wan I2V Image Reference) ---
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/clip_vision/clip_vision_h.safetensors" "clip_vision"
+
+# --- LORAS (Khusus untuk Wan LightX2V) ---
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors" "loras"
+add_to_queue "https://cdn.sogni.ai/ComfyUI/models/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors" "loras"
+
 echo "=========================================="
-echo "🚀 MEMULAI 7 TURBO DOWNLOAD SEKALIGUS..."
+echo "🚀 MEMULAI ULTIMATE DOWNLOAD VIA ANTREAN..."
 echo "=========================================="
 
-# --- DAFTAR FILE ---
+# Jalankan 1 Screen Utama untuk aria2c
+CMD="aria2c --input-file=\"$QUEUE_FILE\" -j 5 -x 16 -s 16 -k 1M -c && echo '✅ SEMUA DOWNLOAD SELESAI!' && sleep 10"
+screen -dmS "MasterDownload" bash -c "$CMD"
 
-# 1. Diffusion High Noise (14GB)
-launch_download "wan_diff_high" "diffusion_models" "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors"
-
-# 2. Diffusion Low Noise (14GB)
-launch_download "wan_diff_low" "diffusion_models" "https://cdn.sogni.ai/ComfyUI/models/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors"
-
-# 3. VAE
-launch_download "wan_vae" "vae" "https://cdn.sogni.ai/ComfyUI/models/vae/wan_2.1_vae.safetensors"
-
-# 4. Text Encoder (UMT5)
-launch_download "wan_t5" "text_encoders" "https://cdn.sogni.ai/ComfyUI/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors"
-
-# 5. Clip Vision
-launch_download "wan_clip" "clip_vision" "https://cdn.sogni.ai/ComfyUI/models/clip_vision/clip_vision_h.safetensors"
-
-# 6. LoRA High Noise
-launch_download "wan_lora_high" "loras" "https://cdn.sogni.ai/ComfyUI/models/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors"
-
-# 7. LoRA Low Noise
-launch_download "wan_lora_low" "loras" "https://cdn.sogni.ai/ComfyUI/models/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors"
-
-echo "=========================================="
-echo "🎉 SEMUA JOB SUDAH DILEPAS KE BACKGROUND!"
-echo "Gunakan perintah 'screen -ls' untuk melihat status."
+echo "🎉 Proses antrean elit (12 file esensial) sedang berjalan di background!"
+echo "➡️ Ketik: 'screen -r MasterDownload' untuk melihat persentase download."
+echo "➡️ Ritual akhir setelah selesai:"
+echo "    chmod -R 777 $BASE_DIR/"
+echo "    cd ~/sogni-b200-cluster && docker compose restart"
 echo "=========================================="
